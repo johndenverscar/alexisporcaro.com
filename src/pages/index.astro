@@ -1,0 +1,199 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { SITE } from "../consts";
+
+const quips = [
+  {
+    quote:
+      "A tone of uncommon warmth and an unerring sense of line — Porcaro plays as if speaking directly to you.",
+    source: "The Strand Review",
+  },
+  {
+    quote:
+      "Phrasing of real intelligence and a fearless, singing upper register.",
+    source: "Classical Notebook",
+  },
+  {
+    quote:
+      "One of the most compelling young woodwind voices of her generation.",
+    source: "Reed & Bow Magazine",
+  },
+];
+
+const highlights = [
+  {
+    title: "About",
+    href: "/about",
+    blurb: "Biography, repertoire, and the story behind the sound.",
+    img: "https://picsum.photos/seed/ap-about/800/1000",
+  },
+  {
+    title: "Events",
+    href: "/events",
+    blurb: "Upcoming recitals, concerto appearances, and chamber dates.",
+    img: "https://picsum.photos/seed/ap-events/800/1000",
+  },
+  {
+    title: "Lessons",
+    href: "/lessons",
+    blurb: "Private study for advanced and pre-professional oboists.",
+    img: "https://picsum.photos/seed/ap-lessons/800/1000",
+  },
+];
+---
+
+<Layout>
+  <!-- HERO -->
+  <section class="relative h-[88vh] min-h-[560px] w-full overflow-hidden">
+    <img
+      src="https://picsum.photos/seed/ap-hero/1920/1280"
+      alt="Alexis Porcaro performing"
+      class="absolute inset-0 h-full w-full object-cover"
+      fetchpriority="high"
+    />
+    <div
+      class="absolute inset-0 bg-gradient-to-t from-ink-900/90 via-ink-900/45 to-ink-900/30"
+    >
+    </div>
+
+    <div
+      class="relative z-10 mx-auto flex h-full max-w-6xl flex-col justify-end px-6 pb-20 lg:px-8"
+    >
+      <p class="mb-4 text-sm uppercase tracking-[0.35em] text-brass-400">
+        Oboist · Teaching Artist
+      </p>
+      <h1
+        class="max-w-3xl font-serif text-6xl leading-[0.95] text-ink-50 sm:text-7xl lg:text-8xl"
+      >
+        Alexis Porcaro
+      </h1>
+      <p class="mt-6 max-w-xl text-lg font-light leading-relaxed text-ink-100">
+        A singing, deeply expressive voice on the oboe — at home on the recital
+        stage, in the concerto spotlight, and among chamber colleagues.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <a
+          href="/events"
+          class="rounded-full bg-brass-500 px-7 py-3 text-sm font-medium tracking-wide text-ink-900 transition-colors hover:bg-brass-400"
+        >
+          Upcoming Events
+        </a>
+        <a
+          href="/contact"
+          class="rounded-full border border-ink-100/50 px-7 py-3 text-sm font-medium tracking-wide text-ink-50 transition-colors hover:bg-ink-50/10"
+        >
+          Get in Touch
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUIPS -->
+  <section class="bg-ink-900 py-24 text-ink-50">
+    <div class="mx-auto max-w-6xl px-6 lg:px-8">
+      <div class="grid gap-12 md:grid-cols-3">
+        {
+          quips.map((q) => (
+            <figure class="reveal">
+              <span class="font-serif text-5xl leading-none text-brass-400">
+                &ldquo;
+              </span>
+              <blockquote class="mt-2 font-serif text-2xl font-light leading-snug">
+                {q.quote}
+              </blockquote>
+              <figcaption class="mt-5 text-xs uppercase tracking-[0.2em] text-ink-300">
+                {q.source}
+              </figcaption>
+            </figure>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- INTRO -->
+  <section class="py-24">
+    <div
+      class="mx-auto grid max-w-6xl items-center gap-12 px-6 md:grid-cols-2 lg:gap-20 lg:px-8"
+    >
+      <div class="reveal">
+        <img
+          src="https://picsum.photos/seed/ap-intro/900/1100"
+          alt="Alexis Porcaro portrait"
+          class="aspect-[4/5] w-full rounded-sm object-cover shadow-xl"
+          loading="lazy"
+        />
+      </div>
+      <div class="reveal">
+        <p class="text-xs uppercase tracking-[0.3em] text-brass-600">Welcome</p>
+        <h2 class="mt-4 text-4xl leading-tight text-ink-900 sm:text-5xl">
+          Music that breathes.
+        </h2>
+        <p class="mt-6 text-lg font-light leading-relaxed text-ink-700">
+          Alexis Porcaro is an oboist whose playing pairs old-world lyricism
+          with a fresh, fearless musical instinct. From Baroque obbligatos to
+          newly commissioned works, she brings an unmistakable warmth and
+          clarity to every program.
+        </p>
+        <p class="mt-4 text-lg font-light leading-relaxed text-ink-700">
+          Alongside an active performing life, she maintains a select private
+          studio for advanced players preparing for auditions and the
+          professional stage.
+        </p>
+        <a
+          href="/about"
+          class="mt-8 inline-flex items-center gap-2 text-sm font-medium tracking-wide text-brass-600 transition-colors hover:text-brass-500"
+        >
+          Read the full bio
+          <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- HIGHLIGHTS -->
+  <section class="pb-12">
+    <div class="mx-auto max-w-6xl px-6 lg:px-8">
+      <div class="grid gap-6 sm:grid-cols-3">
+        {
+          highlights.map((h) => (
+            <a href={h.href} class="group reveal block">
+              <div class="relative overflow-hidden rounded-sm">
+                <img
+                  src={h.img}
+                  alt={h.title}
+                  class="aspect-[4/5] w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  loading="lazy"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-ink-900/80 to-transparent" />
+                <div class="absolute bottom-0 p-6">
+                  <h3 class="font-serif text-3xl text-ink-50">{h.title}</h3>
+                  <p class="mt-1 max-w-xs text-sm text-ink-100">{h.blurb}</p>
+                </div>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="py-20">
+    <div class="mx-auto max-w-4xl px-6 text-center">
+      <h2 class="text-4xl text-ink-900 sm:text-5xl">
+        Bring Alexis to your stage or studio.
+      </h2>
+      <p class="mx-auto mt-4 max-w-xl text-lg font-light text-ink-700">
+        Booking inquiries, collaborations, and lesson requests are always
+        welcome.
+      </p>
+      <a
+        href="/contact"
+        class="mt-8 inline-block rounded-full bg-ink-900 px-8 py-3 text-sm font-medium tracking-wide text-ink-50 transition-colors hover:bg-ink-700"
+      >
+        Contact {SITE.name.split(" ")[0]}
+      </a>
+    </div>
+  </section>
+</Layout>

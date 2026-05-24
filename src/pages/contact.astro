@@ -1,0 +1,126 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageBanner from "../components/PageBanner.astro";
+import InstagramIcon from "../components/InstagramIcon.astro";
+import { SITE } from "../consts";
+---
+
+<Layout title="Contact — Alexis Porcaro">
+  <PageBanner
+    title="Contact"
+    eyebrow="Get in Touch"
+    img="https://picsum.photos/seed/ap-contact-banner/1920/900"
+  />
+
+  <section class="py-20">
+    <div
+      class="mx-auto grid max-w-6xl gap-14 px-6 md:grid-cols-[1fr_1.2fr] lg:gap-20 lg:px-8"
+    >
+      <!-- Details -->
+      <div class="reveal">
+        <h2 class="text-3xl text-ink-900">Let’s talk.</h2>
+        <p class="mt-4 text-lg font-light leading-relaxed text-ink-700">
+          For booking, collaborations, lesson inquiries, or press, send a note
+          using the form — or reach out directly.
+        </p>
+
+        <div class="mt-10 space-y-6">
+          <div>
+            <p class="text-xs uppercase tracking-[0.2em] text-ink-500">Email</p>
+            <a
+              href={`mailto:${SITE.email}`}
+              class="mt-1 block text-lg text-ink-900 transition-colors hover:text-brass-600"
+              >{SITE.email}</a
+            >
+          </div>
+          <div>
+            <p class="text-xs uppercase tracking-[0.2em] text-ink-500">
+              Instagram
+            </p>
+            <a
+              href={SITE.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="mt-1 inline-flex items-center gap-2 text-lg text-ink-900 transition-colors hover:text-brass-600"
+            >
+              <InstagramIcon class="h-5 w-5" />
+              {SITE.instagramHandle}
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <div class="reveal">
+        <!-- NOTE: wire `action` to a form service (Formspree, Resend, etc.) -->
+        <form
+          action="#"
+          method="post"
+          class="space-y-5 rounded-sm border border-ink-100 bg-white/50 p-8"
+        >
+          <div class="grid gap-5 sm:grid-cols-2">
+            <label class="block">
+              <span class="text-xs uppercase tracking-[0.2em] text-ink-500"
+                >Name</span
+              >
+              <input
+                type="text"
+                name="name"
+                required
+                class="mt-2 w-full rounded-sm border border-ink-100 bg-ink-50 px-4 py-3 text-ink-900 outline-none transition focus:border-brass-500"
+              />
+            </label>
+            <label class="block">
+              <span class="text-xs uppercase tracking-[0.2em] text-ink-500"
+                >Email</span
+              >
+              <input
+                type="email"
+                name="email"
+                required
+                class="mt-2 w-full rounded-sm border border-ink-100 bg-ink-50 px-4 py-3 text-ink-900 outline-none transition focus:border-brass-500"
+              />
+            </label>
+          </div>
+
+          <label class="block">
+            <span class="text-xs uppercase tracking-[0.2em] text-ink-500"
+              >Subject</span
+            >
+            <select
+              name="subject"
+              class="mt-2 w-full rounded-sm border border-ink-100 bg-ink-50 px-4 py-3 text-ink-900 outline-none transition focus:border-brass-500"
+            >
+              <option>Booking / Performance</option>
+              <option>Private Lessons</option>
+              <option>Press / Media</option>
+              <option>Other</option>
+            </select>
+          </label>
+
+          <label class="block">
+            <span class="text-xs uppercase tracking-[0.2em] text-ink-500"
+              >Message</span
+            >
+            <textarea
+              name="message"
+              rows="5"
+              required
+              class="mt-2 w-full rounded-sm border border-ink-100 bg-ink-50 px-4 py-3 text-ink-900 outline-none transition focus:border-brass-500"
+            ></textarea>
+          </label>
+
+          <button
+            type="submit"
+            class="w-full rounded-full bg-ink-900 px-8 py-3.5 text-sm font-medium tracking-wide text-ink-50 transition-colors hover:bg-ink-700"
+          >
+            Send Message
+          </button>
+          <p class="text-center text-xs text-ink-500">
+            Demo form — connect to a form service to receive submissions.
+          </p>
+        </form>
+      </div>
+    </div>
+  </section>
+</Layout>

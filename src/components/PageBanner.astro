@@ -1,0 +1,30 @@
+---
+interface Props {
+  title: string;
+  eyebrow?: string;
+  img: string;
+}
+const { title, eyebrow, img } = Astro.props;
+---
+
+<section class="relative h-[44vh] min-h-[300px] w-full overflow-hidden">
+  <img
+    src={img}
+    alt=""
+    class="absolute inset-0 h-full w-full object-cover"
+    fetchpriority="high"
+  />
+  <div class="absolute inset-0 bg-ink-900/55"></div>
+  <div
+    class="relative z-10 mx-auto flex h-full max-w-6xl flex-col justify-end px-6 pb-12 lg:px-8"
+  >
+    {
+      eyebrow && (
+        <p class="mb-3 text-sm uppercase tracking-[0.3em] text-brass-400">
+          {eyebrow}
+        </p>
+      )
+    }
+    <h1 class="font-serif text-5xl text-ink-50 sm:text-6xl">{title}</h1>
+  </div>
+</section>

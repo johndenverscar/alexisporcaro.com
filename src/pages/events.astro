@@ -1,0 +1,116 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageBanner from "../components/PageBanner.astro";
+
+const upcoming = [
+  {
+    date: "2026-06-12",
+    title: "Strauss Oboe Concerto",
+    detail: "with the Hudson Valley Sinfonia · Bard Hall",
+    city: "Annandale-on-Hudson, NY",
+    ticket: "#",
+  },
+  {
+    date: "2026-07-03",
+    title: "Solo Recital: French Reflections",
+    detail: "Poulenc, Saint-Saëns & Dutilleux · with pianist Mara Lin",
+    city: "New York, NY",
+    ticket: "#",
+  },
+  {
+    date: "2026-08-20",
+    title: "Summer Chamber Festival",
+    detail: "Mozart Quartet for Oboe & Strings, K. 370",
+    city: "Lenox, MA",
+    ticket: "#",
+  },
+];
+
+const past = [
+  {
+    date: "2026-03-08",
+    title: "Marcello Concerto in D minor",
+    detail: "Metro Baroque Collective",
+    city: "Brooklyn, NY",
+  },
+  {
+    date: "2026-01-19",
+    title: "Six Metamorphoses after Ovid",
+    detail: "Solo — New Music Salon Series",
+    city: "Philadelphia, PA",
+  },
+  {
+    date: "2025-11-22",
+    title: "Bach Christmas Oratorio",
+    detail: "Principal Oboe · Cathedral Festival Orchestra",
+    city: "Washington, DC",
+  },
+];
+
+const fmt = (iso: string) =>
+  new Date(iso + "T00:00:00").toLocaleDateString("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+---
+
+<Layout title="Events — Alexis Porcaro">
+  <PageBanner
+    title="Events"
+    eyebrow="Calendar"
+    img="https://picsum.photos/seed/ap-events-banner/1920/900"
+  />
+
+  <section class="py-20">
+    <div class="mx-auto max-w-5xl px-6 lg:px-8">
+      <h2 class="text-3xl text-ink-900">Upcoming</h2>
+      <ul class="mt-8 divide-y divide-ink-100 border-y border-ink-100">
+        {
+          upcoming.map((e) => (
+            <li class="reveal grid gap-3 py-7 sm:grid-cols-[150px_1fr_auto] sm:items-center sm:gap-6">
+              <time class="text-sm font-medium uppercase tracking-wide text-brass-600">
+                {fmt(e.date)}
+              </time>
+              <div>
+                <h3 class="font-serif text-2xl text-ink-900">{e.title}</h3>
+                <p class="mt-1 text-ink-700">{e.detail}</p>
+                <p class="mt-1 text-sm text-ink-500">{e.city}</p>
+              </div>
+              <a
+                href={e.ticket}
+                class="justify-self-start rounded-full border border-ink-900 px-5 py-2 text-sm font-medium text-ink-900 transition-colors hover:bg-ink-900 hover:text-ink-50 sm:justify-self-end"
+              >
+                Tickets
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <h2 class="mt-20 text-3xl text-ink-900">Past Performances</h2>
+      <ul class="mt-8 divide-y divide-ink-100 border-y border-ink-100">
+        {
+          past.map((e) => (
+            <li class="grid gap-1 py-5 sm:grid-cols-[150px_1fr] sm:gap-6">
+              <time class="text-sm uppercase tracking-wide text-ink-500">
+                {fmt(e.date)}
+              </time>
+              <div>
+                <h3 class="text-lg text-ink-900">{e.title}</h3>
+                <p class="text-sm text-ink-500">
+                  {e.detail} · {e.city}
+                </p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class="mt-12 text-sm italic text-ink-500">
+        Placeholder listings — real dates and ticket links to come.
+      </p>
+    </div>
+  </section>
+</Layout>
