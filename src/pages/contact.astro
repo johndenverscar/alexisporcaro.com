@@ -3,6 +3,10 @@ import Layout from "../layouts/Layout.astro";
 import PageBanner from "../components/PageBanner.astro";
 import { SITE } from "../consts";
 import contactBanner from "../assets/images/contact-banner.jpg";
+
+// Web3Forms public access key (client-side, recipient-locked). Set via
+// PUBLIC_WEB3FORMS_KEY in .env locally and in the Vercel project env vars.
+const web3formsKey = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? "";
 ---
 
 <Layout title="Contact — Alexis Porcaro">
@@ -34,12 +38,30 @@ import contactBanner from "../assets/images/contact-banner.jpg";
 
       <!-- Form -->
       <div class="reveal">
-        <!-- NOTE: wire `action` to a form service (Formspree, Resend, etc.) -->
         <form
-          action="#"
+          id="contact-form"
+          action="https://api.web3forms.com/submit"
           method="post"
           class="space-y-5 rounded-sm border border-ink-100 bg-white/50 p-8"
         >
+          <input type="hidden" name="access_key" value={web3formsKey} />
+          <input type="hidden" name="from_name" value="alexisporcaro.com" />
+          <input
+            type="hidden"
+            name="subject"
+            value="New inquiry from alexisporcaro.com"
+          />
+          <!-- Honeypot: bots fill this; humans never see it -->
+          <input
+            type="checkbox"
+            name="botcheck"
+            class="hidden"
+            style="display:none"
+            tabindex="-1"
+            autocomplete="off"
+            aria-hidden="true"
+          />
+
           <div class="grid gap-5 sm:grid-cols-2">
             <label class="block">
               <span class="text-xs uppercase tracking-[0.2em] text-ink-500"
@@ -67,10 +89,10 @@ import contactBanner from "../assets/images/contact-banner.jpg";
 
           <label class="block">
             <span class="text-xs uppercase tracking-[0.2em] text-ink-500"
-              >Subject</span
+              >Inquiry</span
             >
             <select
-              name="subject"
+              name="inquiry_type"
               class="mt-2 w-full rounded-sm border border-ink-100 bg-ink-50 px-4 py-3 text-ink-900 outline-none transition focus:border-brass-500"
             >
               <option>Booking / Performance</option>
@@ -93,16 +115,72 @@ import contactBanner from "../assets/images/contact-banner.jpg";
           </label>
 
           <button
+            id="contact-submit"
             type="submit"
-            class="w-full rounded-full bg-ink-900 px-8 py-3.5 text-sm font-medium tracking-wide text-ink-50 transition-colors hover:bg-ink-700"
+            class="w-full rounded-full bg-ink-900 px-8 py-3.5 text-sm font-medium tracking-wide text-ink-50 transition-colors hover:bg-ink-700 disabled:cursor-not-allowed disabled:opacity-60"
           >
             Send Message
           </button>
-          <p class="text-center text-xs text-ink-500">
-            Demo form — connect to a form service to receive submissions.
+          <p
+            id="contact-status"
+            class="hidden text-center text-sm"
+            role="status"
+            aria-live="polite"
+          >
           </p>
         </form>
       </div>
     </div>
   </section>
+
+  <script>
+    const form = document.getElementById("contact-form") as HTMLFormElement | null;
+    const status = document.getElementById("contact-status");
+    const button = document.getElementById("contact-submit") as HTMLButtonElement | null;
+
+    function setStatus(message: string, ok: boolean) {
+      if (!status) return;
+      status.textContent = message;
+      status.classList.remove("hidden", "text-brass-600", "text-red-600");
+      status.classList.add(ok ? "text-brass-600" : "text-red-600");
+    }
+
+    form?.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!button) return;
+
+      const data = Object.fromEntries(new FormData(form));
+      if (!data.access_key) {
+        setStatus("Form isn’t configured yet. Please email directly.", false);
+        return;
+      }
+
+      button.disabled = true;
+      const original = button.textContent;
+      button.textContent = "Sending…";
+
+      try {
+        const res = await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+        const result = await res.json();
+        if (res.ok && result.success) {
+          form.reset();
+          setStatus("Thanks — your message has been sent.", true);
+        } else {
+          setStatus(result.message || "Something went wrong. Please email directly.", false);
+        }
+      } catch {
+        setStatus("Network error. Please email directly.", false);
+      } finally {
+        button.disabled = false;
+        button.textContent = original;
+      }
+    });
+  </script>
 </Layout>
