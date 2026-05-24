@@ -1,0 +1,184 @@
+---
+import { Image } from "astro:assets";
+import Layout from "../layouts/Layout.astro";
+import PageBanner from "../components/PageBanner.astro";
+import mediaBanner from "../assets/images/media-banner.jpg";
+import videoFeatured from "../assets/images/video-featured.jpg";
+import video1 from "../assets/images/video-1.jpg";
+import video2 from "../assets/images/video-2.jpg";
+import video3 from "../assets/images/video-3.jpg";
+
+// Placeholder media. To go live, replace each play button/poster block with a
+// real embed (YouTube/Vimeo for video, Spotify/SoundCloud for audio); see the
+// iframe notes below.
+const featured = {
+  title: "Strauss — Oboe Concerto in D, I. Allegro moderato",
+  detail: "with the Hudson Valley Sinfonia · live, 2026",
+  poster: videoFeatured,
+};
+
+const videos = [
+  {
+    title: "Poulenc — Oboe Sonata, II. Scherzo",
+    detail: "Recital · 2026",
+    poster: video1,
+  },
+  {
+    title: "Britten — Pan (from Six Metamorphoses)",
+    detail: "Solo · 2026",
+    poster: video2,
+  },
+  {
+    title: "Marcello — Concerto in D minor, Adagio",
+    detail: "with Metro Baroque Collective · 2026",
+    poster: video3,
+  },
+];
+
+const audio = [
+  {
+    title: "Mozart — Oboe Concerto in C, K. 314",
+    detail: "Studio recording · 2026",
+  },
+  {
+    title: "Vaughan Williams — Oboe Concerto, Minuet & Musette",
+    detail: "Live · 2025",
+  },
+  {
+    title: "Saint-Saëns — Oboe Sonata, I. Andantino",
+    detail: "Studio recording · 2025",
+  },
+];
+---
+
+<Layout
+  title="Media — Alexis Porcaro"
+  description="Video performances and audio recordings by oboist Alexis Porcaro."
+>
+  <PageBanner title="Media" eyebrow="Watch & Listen" img={mediaBanner} />
+
+  <!-- VIDEO -->
+  <section class="py-20">
+    <div class="mx-auto max-w-6xl px-6 lg:px-8">
+      <p class="text-xs uppercase tracking-[0.3em] text-brass-600">Video</p>
+      <h2 class="mt-3 text-4xl text-ink-900">Performances</h2>
+
+      <!-- Featured video -->
+      <figure class="reveal mt-10">
+        <!--
+          Replace this button/poster block with a real embed, e.g.:
+          <iframe class="h-full w-full" src="https://www.youtube.com/embed/VIDEO_ID"
+            title="..." allow="accelerometer; autoplay; clipboard-write;
+            encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        -->
+        <button
+          type="button"
+          class="group relative block aspect-video w-full overflow-hidden rounded-sm bg-ink-900"
+          aria-label={`Play: ${featured.title}`}
+        >
+          <Image
+            src={featured.poster}
+            alt=""
+            class="absolute inset-0 h-full w-full object-cover opacity-80 transition group-hover:scale-105 group-hover:opacity-90"
+          />
+          <span
+            class="absolute inset-0 grid place-items-center"
+            aria-hidden="true"
+          >
+            <span
+              class="grid h-20 w-20 place-items-center rounded-full bg-ink-50/90 text-ink-900 shadow-lg transition group-hover:scale-110"
+            >
+              <svg class="ml-1 h-8 w-8" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M8 5v14l11-7z"></path>
+              </svg>
+            </span>
+          </span>
+        </button>
+        <figcaption class="mt-4">
+          <p class="font-serif text-2xl text-ink-900">{featured.title}</p>
+          <p class="mt-1 text-sm text-ink-500">{featured.detail}</p>
+        </figcaption>
+      </figure>
+
+      <!-- Video grid -->
+      <div class="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          videos.map((v) => (
+            <figure class="reveal">
+              <button
+                type="button"
+                class="group relative block aspect-video w-full overflow-hidden rounded-sm bg-ink-900"
+                aria-label={`Play: ${v.title}`}
+              >
+                <Image
+                  src={v.poster}
+                  alt=""
+                  class="absolute inset-0 h-full w-full object-cover opacity-80 transition group-hover:scale-105 group-hover:opacity-90"
+                />
+                <span
+                  class="absolute inset-0 grid place-items-center"
+                  aria-hidden="true"
+                >
+                  <span class="grid h-12 w-12 place-items-center rounded-full bg-ink-50/90 text-ink-900 transition group-hover:scale-110">
+                    <svg class="ml-0.5 h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </span>
+                </span>
+              </button>
+              <figcaption class="mt-3">
+                <p class="text-ink-900">{v.title}</p>
+                <p class="mt-0.5 text-sm text-ink-500">{v.detail}</p>
+              </figcaption>
+            </figure>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- AUDIO -->
+  <section class="bg-ink-900 py-20 text-ink-50">
+    <div class="mx-auto max-w-4xl px-6 lg:px-8">
+      <p class="text-xs uppercase tracking-[0.3em] text-brass-400">Audio</p>
+      <h2 class="mt-3 text-4xl">Recordings</h2>
+
+      <!--
+        Replace each row with a real embed, e.g. a Spotify or SoundCloud iframe:
+        <iframe class="w-full" height="80" src="https://open.spotify.com/embed/track/ID"
+          allow="encrypted-media" loading="lazy"></iframe>
+      -->
+      <ul class="mt-10 divide-y divide-ink-700/60 border-y border-ink-700/60">
+        {
+          audio.map((a) => (
+            <li class="reveal flex items-center gap-5 py-5">
+              <button
+                type="button"
+                class="grid h-12 w-12 flex-none place-items-center rounded-full border border-brass-400 text-brass-400 transition hover:bg-brass-400 hover:text-ink-900"
+                aria-label={`Play: ${a.title}`}
+              >
+                <svg class="ml-0.5 h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </button>
+              <div class="min-w-0">
+                <p class="truncate font-serif text-xl">{a.title}</p>
+                <p class="mt-0.5 text-sm text-ink-300">{a.detail}</p>
+              </div>
+              <span
+                class="ml-auto hidden h-1 flex-1 max-w-[40%] overflow-hidden rounded-full bg-ink-700 sm:block"
+                aria-hidden="true"
+              >
+                <span class="block h-full w-1/3 bg-brass-400/70"></span>
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class="mt-8 text-sm italic text-ink-300">
+        Placeholder media — swap in real video and audio embeds when ready.
+      </p>
+    </div>
+  </section>
+</Layout>

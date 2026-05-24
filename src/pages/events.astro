@@ -1,6 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import PageBanner from "../components/PageBanner.astro";
+import eventsBanner from "../assets/images/events-banner.jpg";
 
 const upcoming = [
   {
@@ -57,11 +58,7 @@ const fmt = (iso: string) =>
 ---
 
 <Layout title="Events — Alexis Porcaro">
-  <PageBanner
-    title="Events"
-    eyebrow="Calendar"
-    img="https://picsum.photos/seed/ap-events-banner/1920/900"
-  />
+  <PageBanner title="Events" eyebrow="Calendar" img={eventsBanner} />
 
   <section class="py-20">
     <div class="mx-auto max-w-5xl px-6 lg:px-8">

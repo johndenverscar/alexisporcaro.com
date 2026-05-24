@@ -1,6 +1,9 @@
 ---
+import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
 import PageBanner from "../components/PageBanner.astro";
+import aboutBanner from "../assets/images/about-banner.jpg";
+import aboutPortrait from "../assets/images/about-portrait.jpg";
 
 const facts = [
   { label: "Instrument", value: "Oboe & English Horn" },
@@ -20,7 +23,7 @@ const repertoire = [
 ---
 
 <Layout title="About — Alexis Porcaro">
-  <PageBanner title="About" eyebrow="The Artist" img="https://picsum.photos/seed/ap-about-banner/1920/900" />
+  <PageBanner title="About" eyebrow="The Artist" img={aboutBanner} />
 
   <section class="py-20">
     <div
@@ -60,8 +63,8 @@ const repertoire = [
 
       <!-- Sidebar -->
       <aside class="reveal space-y-10">
-        <img
-          src="https://picsum.photos/seed/ap-about-portrait/700/850"
+        <Image
+          src={aboutPortrait}
           alt="Alexis Porcaro"
           class="aspect-[4/5] w-full rounded-sm object-cover shadow-lg"
           loading="lazy"

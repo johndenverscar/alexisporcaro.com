@@ -1,6 +1,9 @@
 ---
+import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
 import PageBanner from "../components/PageBanner.astro";
+import lessonsBanner from "../assets/images/lessons-banner.jpg";
+import lessonsStudio from "../assets/images/lessons-studio.jpg";
 
 const offerings = [
   {
@@ -26,11 +29,7 @@ const expect = [
 ---
 
 <Layout title="Private Lessons — Alexis Porcaro">
-  <PageBanner
-    title="Private Lessons"
-    eyebrow="Studio"
-    img="https://picsum.photos/seed/ap-lessons-banner/1920/900"
-  />
+  <PageBanner title="Private Lessons" eyebrow="Studio" img={lessonsBanner} />
 
   <section class="py-20">
     <div class="mx-auto max-w-3xl px-6 text-center lg:px-8">
@@ -68,8 +67,8 @@ const expect = [
     <div
       class="mx-auto grid max-w-6xl items-center gap-12 px-6 md:grid-cols-2 lg:gap-20 lg:px-8"
     >
-      <img
-        src="https://picsum.photos/seed/ap-lessons-studio/900/1100"
+      <Image
+        src={lessonsStudio}
         alt="In the studio"
         class="reveal aspect-[4/5] w-full rounded-sm object-cover shadow-lg"
         loading="lazy"

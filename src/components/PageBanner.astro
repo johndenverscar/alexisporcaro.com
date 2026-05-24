@@ -1,14 +1,17 @@
 ---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
 interface Props {
   title: string;
   eyebrow?: string;
-  img: string;
+  img: ImageMetadata;
 }
 const { title, eyebrow, img } = Astro.props;
 ---
 
 <section class="relative h-[44vh] min-h-[300px] w-full overflow-hidden">
-  <img
+  <Image
     src={img}
     alt=""
     class="absolute inset-0 h-full w-full object-cover"

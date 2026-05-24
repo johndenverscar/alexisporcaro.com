@@ -1,6 +1,12 @@
 ---
+import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
 import { SITE } from "../consts";
+import heroImg from "../assets/images/hero.jpg";
+import introImg from "../assets/images/intro-portrait.jpg";
+import highlightAbout from "../assets/images/highlight-about.jpg";
+import highlightEvents from "../assets/images/highlight-events.jpg";
+import highlightLessons from "../assets/images/highlight-lessons.jpg";
 
 const quips = [
   {
@@ -25,71 +31,73 @@ const highlights = [
     title: "About",
     href: "/about",
     blurb: "Biography, repertoire, and the story behind the sound.",
-    img: "https://picsum.photos/seed/ap-about/800/1000",
+    img: highlightAbout,
   },
   {
     title: "Events",
     href: "/events",
     blurb: "Upcoming recitals, concerto appearances, and chamber dates.",
-    img: "https://picsum.photos/seed/ap-events/800/1000",
+    img: highlightEvents,
   },
   {
     title: "Lessons",
     href: "/lessons",
     blurb: "Private study for advanced and pre-professional oboists.",
-    img: "https://picsum.photos/seed/ap-lessons/800/1000",
+    img: highlightLessons,
   },
 ];
 ---
 
 <Layout>
   <!-- HERO -->
-  <section class="relative h-[88vh] min-h-[560px] w-full overflow-hidden">
-    <img
-      src="https://picsum.photos/seed/ap-hero/1920/1280"
-      alt="Alexis Porcaro performing"
-      class="absolute inset-0 h-full w-full object-cover"
-      fetchpriority="high"
-    />
-    <div
-      class="absolute inset-0 bg-gradient-to-t from-ink-900/90 via-ink-900/45 to-ink-900/30"
-    >
-    </div>
+  <section class="bg-ink-900 text-ink-50">
+    <div class="mx-auto grid max-w-7xl items-stretch md:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
+      <!-- Vertical photo -->
+      <div class="relative order-1">
+        <Image
+          src={heroImg}
+          alt="Alexis Porcaro in a black dress, holding her oboe"
+          class="h-[58vh] w-full object-cover object-[50%_25%] md:h-full md:min-h-[90vh]"
+          fetchpriority="high"
+          loading="eager"
+        />
+      </div>
 
-    <div
-      class="relative z-10 mx-auto flex h-full max-w-6xl flex-col justify-end px-6 pb-20 lg:px-8"
-    >
-      <p class="mb-4 text-sm uppercase tracking-[0.35em] text-brass-400">
-        Oboist · Teaching Artist
-      </p>
-      <h1
-        class="max-w-3xl font-serif text-6xl leading-[0.95] text-ink-50 sm:text-7xl lg:text-8xl"
+      <!-- Text in the negative space to the right -->
+      <div
+        class="order-2 flex flex-col justify-center px-6 py-16 sm:px-10 lg:px-16"
       >
-        Alexis Porcaro
-      </h1>
-      <p class="mt-6 max-w-xl text-lg font-light leading-relaxed text-ink-100">
-        A singing, deeply expressive voice on the oboe — at home on the recital
-        stage, in the concerto spotlight, and among chamber colleagues.
-      </p>
-      <div class="mt-8 flex flex-wrap gap-4">
-        <a
-          href="/events"
-          class="rounded-full bg-brass-500 px-7 py-3 text-sm font-medium tracking-wide text-ink-900 transition-colors hover:bg-brass-400"
-        >
-          Upcoming Events
-        </a>
-        <a
-          href="/contact"
-          class="rounded-full border border-ink-100/50 px-7 py-3 text-sm font-medium tracking-wide text-ink-50 transition-colors hover:bg-ink-50/10"
-        >
-          Get in Touch
-        </a>
+        <p class="mb-4 text-sm uppercase tracking-[0.35em] text-brass-400">
+          Oboist · Teaching Artist
+        </p>
+        <h1 class="font-serif text-6xl leading-[0.92] sm:text-7xl lg:text-8xl">
+          Alexis<br />Porcaro
+        </h1>
+        <p class="mt-6 max-w-md text-lg font-light leading-relaxed text-ink-100">
+          A singing, deeply expressive voice on the oboe — at home on the
+          recital stage, in the concerto spotlight, and among chamber
+          colleagues.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-4">
+          <a
+            href="/events"
+            class="rounded-full bg-brass-500 px-7 py-3 text-sm font-medium tracking-wide text-ink-900 transition-colors hover:bg-brass-400"
+          >
+            Upcoming Events
+          </a>
+          <a
+            href="/contact"
+            class="rounded-full border border-ink-100/40 px-7 py-3 text-sm font-medium tracking-wide text-ink-50 transition-colors hover:bg-ink-50/10"
+          >
+            Get in Touch
+          </a>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- QUIPS -->
-  <section class="bg-ink-900 py-24 text-ink-50">
+  <section class="border-t border-ink-700/50 bg-ink-900 py-24 text-ink-50">
     <div class="mx-auto max-w-6xl px-6 lg:px-8">
       <div class="grid gap-12 md:grid-cols-3">
         {
@@ -117,8 +125,8 @@ const highlights = [
       class="mx-auto grid max-w-6xl items-center gap-12 px-6 md:grid-cols-2 lg:gap-20 lg:px-8"
     >
       <div class="reveal">
-        <img
-          src="https://picsum.photos/seed/ap-intro/900/1100"
+        <Image
+          src={introImg}
           alt="Alexis Porcaro portrait"
           class="aspect-[4/5] w-full rounded-sm object-cover shadow-xl"
           loading="lazy"
@@ -159,7 +167,7 @@ const highlights = [
           highlights.map((h) => (
             <a href={h.href} class="group reveal block">
               <div class="relative overflow-hidden rounded-sm">
-                <img
+                <Image
                   src={h.img}
                   alt={h.title}
                   class="aspect-[4/5] w-full object-cover transition-transform duration-700 group-hover:scale-105"

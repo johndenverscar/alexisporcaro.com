@@ -1,16 +1,12 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import PageBanner from "../components/PageBanner.astro";
-import InstagramIcon from "../components/InstagramIcon.astro";
 import { SITE } from "../consts";
+import contactBanner from "../assets/images/contact-banner.jpg";
 ---
 
 <Layout title="Contact — Alexis Porcaro">
-  <PageBanner
-    title="Contact"
-    eyebrow="Get in Touch"
-    img="https://picsum.photos/seed/ap-contact-banner/1920/900"
-  />
+  <PageBanner title="Contact" eyebrow="Get in Touch" img={contactBanner} />
 
   <section class="py-20">
     <div
@@ -32,20 +28,6 @@ import { SITE } from "../consts";
               class="mt-1 block text-lg text-ink-900 transition-colors hover:text-brass-600"
               >{SITE.email}</a
             >
-          </div>
-          <div>
-            <p class="text-xs uppercase tracking-[0.2em] text-ink-500">
-              Instagram
-            </p>
-            <a
-              href={SITE.instagram}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="mt-1 inline-flex items-center gap-2 text-lg text-ink-900 transition-colors hover:text-brass-600"
-            >
-              <InstagramIcon class="h-5 w-5" />
-              {SITE.instagramHandle}
-            </a>
           </div>
         </div>
       </div>

@@ -1,6 +1,5 @@
 ---
 import { SITE, NAV } from "../consts";
-import InstagramIcon from "./InstagramIcon.astro";
 
 const path = Astro.url.pathname;
 const isActive = (href: string) =>
@@ -44,16 +43,6 @@ const isActive = (href: string) =>
           ))
         }
       </ul>
-
-      <a
-        href={SITE.instagram}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Instagram"
-        class="text-ink-700 transition-colors hover:text-brass-600"
-      >
-        <InstagramIcon class="h-5 w-5" />
-      </a>
 
       <!-- Mobile menu toggle -->
       <button
