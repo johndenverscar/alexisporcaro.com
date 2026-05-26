@@ -1,5 +1,8 @@
 ---
-import { SITE, NAV } from "../consts";
+import { NAV, SITE_FALLBACK } from "../consts";
+import { getSite } from "../lib/queries";
+
+const site = (await getSite()) ?? SITE_FALLBACK;
 
 const path = Astro.url.pathname;
 const isActive = (href: string) =>
@@ -16,9 +19,9 @@ const isActive = (href: string) =>
       href="/"
       class="font-serif text-xl tracking-tight text-ink-900 transition-opacity hover:opacity-70"
     >
-      {SITE.name}
+      {site.name}
       <span class="ml-1 hidden text-sm text-brass-600 sm:inline"
-        >· {SITE.role}</span
+        >· {site.role}</span
       >
     </a>
 

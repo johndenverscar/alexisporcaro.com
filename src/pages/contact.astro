@@ -1,16 +1,21 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import PageBanner from "../components/PageBanner.astro";
-import { SITE } from "../consts";
-import contactBanner from "../assets/images/contact-banner.jpg";
+import { SITE_FALLBACK } from "../consts";
+import { getContact, getSite } from "../lib/queries";
 
-// Web3Forms public access key (client-side, recipient-locked). Set via
-// PUBLIC_WEB3FORMS_KEY in .env locally and in the Vercel project env vars.
+const page = await getContact();
+const site = (await getSite()) ?? SITE_FALLBACK;
+
 const web3formsKey = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? "";
 ---
 
 <Layout title="Contact — Alexis Porcaro">
-  <PageBanner title="Contact" eyebrow="Get in Touch" img={contactBanner} />
+  <PageBanner
+    title={page?.bannerTitle ?? "Contact"}
+    eyebrow={page?.bannerEyebrow ?? "Get in Touch"}
+    image={page?.bannerImage}
+  />
 
   <section class="py-20">
     <div
@@ -18,19 +23,26 @@ const web3formsKey = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? "";
     >
       <!-- Details -->
       <div class="reveal">
-        <h2 class="text-3xl text-ink-900">Let’s talk.</h2>
-        <p class="mt-4 text-lg font-light leading-relaxed text-ink-700">
-          For booking, collaborations, lesson inquiries, or press, send a note
-          using the form — or reach out directly.
-        </p>
+        {
+          page?.introHeading && (
+            <h2 class="text-3xl text-ink-900">{page.introHeading}</h2>
+          )
+        }
+        {
+          page?.introBody && (
+            <p class="mt-4 text-lg font-light leading-relaxed text-ink-700">
+              {page.introBody}
+            </p>
+          )
+        }
 
         <div class="mt-10 space-y-6">
           <div>
             <p class="text-xs uppercase tracking-[0.2em] text-ink-500">Email</p>
             <a
-              href={`mailto:${SITE.email}`}
+              href={`mailto:${site.email}`}
               class="mt-1 block text-lg text-ink-900 transition-colors hover:text-brass-600"
-              >{SITE.email}</a
+              >{site.email}</a
             >
           </div>
         </div>
@@ -51,7 +63,6 @@ const web3formsKey = import.meta.env.PUBLIC_WEB3FORMS_KEY ?? "";
             name="subject"
             value="New inquiry from alexisporcaro.com"
           />
-          <!-- Honeypot: bots fill this; humans never see it -->
           <input
             type="checkbox"
             name="botcheck"

@@ -1,123 +1,113 @@
 ---
-import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
-import { SITE } from "../consts";
-import heroImg from "../assets/images/hero.jpg";
-import introImg from "../assets/images/intro-portrait.jpg";
-import highlightAbout from "../assets/images/highlight-about.jpg";
-import highlightEvents from "../assets/images/highlight-events.jpg";
-import highlightLessons from "../assets/images/highlight-lessons.jpg";
+import { getHome, getSite } from "../lib/queries";
+import { urlFor } from "../lib/sanity";
+import { toHTML } from "@portabletext/to-html";
+import { SITE_FALLBACK } from "../consts";
 
-const quips = [
-  {
-    quote:
-      "A tone of uncommon warmth and an unerring sense of line — Porcaro plays as if speaking directly to you.",
-    source: "The Strand Review",
-  },
-  {
-    quote:
-      "Phrasing of real intelligence and a fearless, singing upper register.",
-    source: "Classical Notebook",
-  },
-  {
-    quote:
-      "One of the most compelling young woodwind voices of her generation.",
-    source: "Reed & Bow Magazine",
-  },
-];
+const home = await getHome();
+const site = (await getSite()) ?? SITE_FALLBACK;
 
-const highlights = [
-  {
-    title: "About",
-    href: "/about",
-    blurb: "Biography, repertoire, and the story behind the sound.",
-    img: highlightAbout,
-  },
-  {
-    title: "Events",
-    href: "/events",
-    blurb: "Upcoming recitals, concerto appearances, and chamber dates.",
-    img: highlightEvents,
-  },
-  {
-    title: "Lessons",
-    href: "/lessons",
-    blurb: "Private study for advanced and pre-professional oboists.",
-    img: highlightLessons,
-  },
-];
+const heroSrc = home?.heroImage
+  ? urlFor(home.heroImage).width(1400).auto("format").url()
+  : null;
+const introSrc = home?.introImage
+  ? urlFor(home.introImage).width(900).auto("format").url()
+  : null;
+
+const introBodyHtml = home?.introBody ? toHTML(home.introBody) : "";
 ---
 
 <Layout>
   <!-- HERO -->
   <section class="bg-ink-900 text-ink-50">
     <div class="mx-auto grid max-w-7xl items-stretch md:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
-      <!-- Vertical photo -->
       <div class="relative order-1">
-        <Image
-          src={heroImg}
-          alt="Alexis Porcaro in a black dress, holding her oboe"
-          class="h-[58vh] w-full object-cover object-[50%_25%] md:h-full md:min-h-[90vh]"
-          fetchpriority="high"
-          loading="eager"
-        />
+        {
+          heroSrc && (
+            <img
+              src={heroSrc}
+              alt={`${site.name} in a black dress, holding her oboe`}
+              class="h-[58vh] w-full object-cover object-[50%_25%] md:h-full md:min-h-[90vh]"
+              fetchpriority="high"
+              loading="eager"
+            />
+          )
+        }
       </div>
 
-      <!-- Text in the negative space to the right -->
       <div
         class="order-2 flex flex-col justify-center px-6 py-16 sm:px-10 lg:px-16"
       >
-        <p class="mb-4 text-sm uppercase tracking-[0.35em] text-brass-400">
-          Oboist · Teaching Artist
-        </p>
+        {
+          home?.heroEyebrow && (
+            <p class="mb-4 text-sm uppercase tracking-[0.35em] text-brass-400">
+              {home.heroEyebrow}
+            </p>
+          )
+        }
         <h1 class="font-serif text-6xl leading-[0.92] sm:text-7xl lg:text-8xl">
-          Alexis<br />Porcaro
+          {site.name.split(" ").map((part, i, arr) => (
+            <>{part}{i < arr.length - 1 && <br />}</>
+          ))}
         </h1>
-        <p class="mt-6 max-w-md text-lg font-light leading-relaxed text-ink-100">
-          A singing, deeply expressive voice on the oboe — at home on the
-          recital stage, in the concerto spotlight, and among chamber
-          colleagues.
-        </p>
+        {
+          home?.heroSubtitle && (
+            <p class="mt-6 max-w-md text-lg font-light leading-relaxed text-ink-100">
+              {home.heroSubtitle}
+            </p>
+          )
+        }
         <div class="mt-8 flex flex-wrap gap-4">
-          <a
-            href="/events"
-            class="rounded-full bg-brass-500 px-7 py-3 text-sm font-medium tracking-wide text-ink-900 transition-colors hover:bg-brass-400"
-          >
-            Upcoming Events
-          </a>
-          <a
-            href="/contact"
-            class="rounded-full border border-ink-100/40 px-7 py-3 text-sm font-medium tracking-wide text-ink-50 transition-colors hover:bg-ink-50/10"
-          >
-            Get in Touch
-          </a>
+          {
+            home?.heroPrimaryCtaLabel && (
+              <a
+                href={home.heroPrimaryCtaHref || "#"}
+                class="rounded-full bg-brass-500 px-7 py-3 text-sm font-medium tracking-wide text-ink-900 transition-colors hover:bg-brass-400"
+              >
+                {home.heroPrimaryCtaLabel}
+              </a>
+            )
+          }
+          {
+            home?.heroSecondaryCtaLabel && (
+              <a
+                href={home.heroSecondaryCtaHref || "#"}
+                class="rounded-full border border-ink-100/40 px-7 py-3 text-sm font-medium tracking-wide text-ink-50 transition-colors hover:bg-ink-50/10"
+              >
+                {home.heroSecondaryCtaLabel}
+              </a>
+            )
+          }
         </div>
       </div>
     </div>
   </section>
 
-  <!-- QUIPS -->
-  <section class="border-t border-ink-700/50 bg-ink-900 py-24 text-ink-50">
-    <div class="mx-auto max-w-6xl px-6 lg:px-8">
-      <div class="grid gap-12 md:grid-cols-3">
-        {
-          quips.map((q) => (
-            <figure class="reveal">
-              <span class="font-serif text-5xl leading-none text-brass-400">
-                &ldquo;
-              </span>
-              <blockquote class="mt-2 font-serif text-2xl font-light leading-snug">
-                {q.quote}
-              </blockquote>
-              <figcaption class="mt-5 text-xs uppercase tracking-[0.2em] text-ink-300">
-                {q.source}
-              </figcaption>
-            </figure>
-          ))
-        }
-      </div>
-    </div>
-  </section>
+  <!-- QUOTES -->
+  {
+    home?.quotes?.length > 0 && (
+      <section class="border-t border-ink-700/50 bg-ink-900 py-24 text-ink-50">
+        <div class="mx-auto max-w-6xl px-6 lg:px-8">
+          <div class="grid gap-12 md:grid-cols-3">
+            {home.quotes.map((q: { quote: string; source: string }) => (
+              <figure class="reveal">
+                <span class="font-serif text-5xl leading-none text-brass-400">
+                  &ldquo;
+                </span>
+                <blockquote class="mt-2 font-serif text-2xl font-light leading-snug">
+                  {q.quote}
+                </blockquote>
+                <figcaption class="mt-5 text-xs uppercase tracking-[0.2em] text-ink-300">
+                  {q.source}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
 
   <!-- INTRO -->
   <section class="py-24">
@@ -125,83 +115,110 @@ const highlights = [
       class="mx-auto grid max-w-6xl items-center gap-12 px-6 md:grid-cols-2 lg:gap-20 lg:px-8"
     >
       <div class="reveal">
-        <Image
-          src={introImg}
-          alt="Alexis Porcaro portrait"
-          class="aspect-[4/5] w-full rounded-sm object-cover shadow-xl"
-          loading="lazy"
-        />
+        {
+          introSrc && (
+            <img
+              src={introSrc}
+              alt={`${site.name} portrait`}
+              class="aspect-[4/5] w-full rounded-sm object-cover shadow-xl"
+              loading="lazy"
+            />
+          )
+        }
       </div>
       <div class="reveal">
-        <p class="text-xs uppercase tracking-[0.3em] text-brass-600">Welcome</p>
-        <h2 class="mt-4 text-4xl leading-tight text-ink-900 sm:text-5xl">
-          Music that breathes.
-        </h2>
-        <p class="mt-6 text-lg font-light leading-relaxed text-ink-700">
-          Alexis Porcaro is an oboist whose playing pairs old-world lyricism
-          with a fresh, fearless musical instinct. From Baroque obbligatos to
-          newly commissioned works, she brings an unmistakable warmth and
-          clarity to every program.
-        </p>
-        <p class="mt-4 text-lg font-light leading-relaxed text-ink-700">
-          Alongside an active performing life, she maintains a select private
-          studio for advanced players preparing for auditions and the
-          professional stage.
-        </p>
-        <a
-          href="/about"
-          class="mt-8 inline-flex items-center gap-2 text-sm font-medium tracking-wide text-brass-600 transition-colors hover:text-brass-500"
-        >
-          Read the full bio
-          <span aria-hidden="true">→</span>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- HIGHLIGHTS -->
-  <section class="pb-12">
-    <div class="mx-auto max-w-6xl px-6 lg:px-8">
-      <div class="grid gap-6 sm:grid-cols-3">
         {
-          highlights.map((h) => (
-            <a href={h.href} class="group reveal block">
-              <div class="relative overflow-hidden rounded-sm">
-                <Image
-                  src={h.img}
-                  alt={h.title}
-                  class="aspect-[4/5] w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  loading="lazy"
-                />
-                <div class="absolute inset-0 bg-gradient-to-t from-ink-900/80 to-transparent" />
-                <div class="absolute bottom-0 p-6">
-                  <h3 class="font-serif text-3xl text-ink-50">{h.title}</h3>
-                  <p class="mt-1 max-w-xs text-sm text-ink-100">{h.blurb}</p>
-                </div>
-              </div>
+          home?.introEyebrow && (
+            <p class="text-xs uppercase tracking-[0.3em] text-brass-600">
+              {home.introEyebrow}
+            </p>
+          )
+        }
+        {
+          home?.introHeading && (
+            <h2 class="mt-4 text-4xl leading-tight text-ink-900 sm:text-5xl">
+              {home.introHeading}
+            </h2>
+          )
+        }
+        <div
+          class="prose-intro mt-6 space-y-4 text-lg font-light leading-relaxed text-ink-700"
+          set:html={introBodyHtml}
+        />
+        {
+          home?.introLinkLabel && (
+            <a
+              href={home.introLinkHref || "#"}
+              class="mt-8 inline-flex items-center gap-2 text-sm font-medium tracking-wide text-brass-600 transition-colors hover:text-brass-500"
+            >
+              {home.introLinkLabel}
+              <span aria-hidden="true">→</span>
             </a>
-          ))
+          )
         }
       </div>
     </div>
   </section>
 
+  <!-- HIGHLIGHTS -->
+  {
+    home?.highlights?.length > 0 && (
+      <section class="pb-12">
+        <div class="mx-auto max-w-6xl px-6 lg:px-8">
+          <div class="grid gap-6 sm:grid-cols-3">
+            {home.highlights.map(
+              (h: { title: string; href: string; blurb: string; image: unknown }) => {
+                const src = h.image
+                  ? urlFor(h.image).width(800).auto("format").url()
+                  : null;
+                return (
+                  <a href={h.href} class="group reveal block">
+                    <div class="relative overflow-hidden rounded-sm">
+                      {src && (
+                        <img
+                          src={src}
+                          alt={h.title}
+                          class="aspect-[4/5] w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                          loading="lazy"
+                        />
+                      )}
+                      <div class="absolute inset-0 bg-gradient-to-t from-ink-900/80 to-transparent" />
+                      <div class="absolute bottom-0 p-6">
+                        <h3 class="font-serif text-3xl text-ink-50">{h.title}</h3>
+                        <p class="mt-1 max-w-xs text-sm text-ink-100">{h.blurb}</p>
+                      </div>
+                    </div>
+                  </a>
+                );
+              },
+            )}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
   <!-- CTA -->
-  <section class="py-20">
-    <div class="mx-auto max-w-4xl px-6 text-center">
-      <h2 class="text-4xl text-ink-900 sm:text-5xl">
-        Bring Alexis to your stage or studio.
-      </h2>
-      <p class="mx-auto mt-4 max-w-xl text-lg font-light text-ink-700">
-        Booking inquiries, collaborations, and lesson requests are always
-        welcome.
-      </p>
-      <a
-        href="/contact"
-        class="mt-8 inline-block rounded-full bg-ink-900 px-8 py-3 text-sm font-medium tracking-wide text-ink-50 transition-colors hover:bg-ink-700"
-      >
-        Contact {SITE.name.split(" ")[0]}
-      </a>
-    </div>
-  </section>
+  {
+    home?.ctaHeading && (
+      <section class="py-20">
+        <div class="mx-auto max-w-4xl px-6 text-center">
+          <h2 class="text-4xl text-ink-900 sm:text-5xl">{home.ctaHeading}</h2>
+          {home.ctaBody && (
+            <p class="mx-auto mt-4 max-w-xl text-lg font-light text-ink-700">
+              {home.ctaBody}
+            </p>
+          )}
+          {home.ctaButtonLabel && (
+            <a
+              href={home.ctaButtonHref || "#"}
+              class="mt-8 inline-block rounded-full bg-ink-900 px-8 py-3 text-sm font-medium tracking-wide text-ink-50 transition-colors hover:bg-ink-700"
+            >
+              {home.ctaButtonLabel}
+            </a>
+          )}
+        </div>
+      </section>
+    )
+  }
 </Layout>

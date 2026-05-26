@@ -1,6 +1,8 @@
 ---
-import { SITE, NAV } from "../consts";
+import { NAV, SITE_FALLBACK } from "../consts";
+import { getSite } from "../lib/queries";
 
+const site = (await getSite()) ?? SITE_FALLBACK;
 const year = new Date().getFullYear();
 ---
 
@@ -9,8 +11,8 @@ const year = new Date().getFullYear();
     class="mx-auto grid max-w-6xl gap-10 px-6 py-14 sm:grid-cols-2 lg:grid-cols-3 lg:px-8"
   >
     <div>
-      <p class="font-serif text-2xl text-ink-900">{SITE.name}</p>
-      <p class="mt-1 text-sm tracking-wide text-brass-600">{SITE.role}</p>
+      <p class="font-serif text-2xl text-ink-900">{site.name}</p>
+      <p class="mt-1 text-sm tracking-wide text-brass-600">{site.role}</p>
       <p class="mt-4 max-w-xs text-sm leading-relaxed text-ink-500">
         Performing artist and teacher. For booking, lessons, or general
         inquiries, please reach out.
@@ -38,9 +40,9 @@ const year = new Date().getFullYear();
     <div>
       <p class="text-xs uppercase tracking-[0.2em] text-ink-500">Connect</p>
       <a
-        href={`mailto:${SITE.email}`}
+        href={`mailto:${site.email}`}
         class="mt-4 block text-sm text-ink-700 transition-colors hover:text-brass-600"
-        >{SITE.email}</a
+        >{site.email}</a
       >
     </div>
   </div>
@@ -49,7 +51,7 @@ const year = new Date().getFullYear();
     <p
       class="mx-auto max-w-6xl px-6 py-6 text-xs text-ink-300 lg:px-8"
     >
-      © {year} {SITE.name}. All rights reserved.
+      © {year} {site.name}. All rights reserved.
     </p>
   </div>
 </footer>

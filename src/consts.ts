@@ -1,9 +1,3 @@
-export const SITE = {
-  name: "Alexis Porcaro",
-  role: "Oboist",
-  email: "alexis.porcaro@gmail.com",
-};
-
 export const NAV = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
@@ -12,3 +6,9 @@ export const NAV = [
   { label: "Lessons", href: "/lessons" },
   { label: "Contact", href: "/contact" },
 ];
+
+export const SITE_FALLBACK = {
+  name: "Alexis Porcaro",
+  role: "Oboist",
+  email: "alexis.porcaro@gmail.com",
+};

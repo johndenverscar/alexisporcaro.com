@@ -1,111 +1,98 @@
 ---
-import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
 import PageBanner from "../components/PageBanner.astro";
-import aboutBanner from "../assets/images/about-banner.jpg";
-import aboutPortrait from "../assets/images/about-portrait.jpg";
+import { getAbout } from "../lib/queries";
+import { urlFor } from "../lib/sanity";
+import { toHTML } from "@portabletext/to-html";
 
-const facts = [
-  { label: "Instrument", value: "Oboe & English Horn" },
-  { label: "Based in", value: "New York, NY" },
-  { label: "Education", value: "M.M., Manhattan School of Music" },
-  { label: "Reeds", value: "Handmade, American scrape" },
-];
-
-const repertoire = [
-  "Strauss — Oboe Concerto in D",
-  "Mozart — Oboe Concerto in C, K. 314",
-  "Marcello — Concerto in D minor",
-  "Britten — Six Metamorphoses after Ovid",
-  "Poulenc — Sonata for Oboe and Piano",
-  "Vaughan Williams — Concerto for Oboe and Strings",
-];
+const about = await getAbout();
+const portraitSrc = about?.portrait
+  ? urlFor(about.portrait).width(900).auto("format").url()
+  : null;
+const bioHtml = about?.bio
+  ? toHTML(about.bio, {
+      components: {
+        marks: {
+          strong: ({ children }) =>
+            `<strong class="font-medium text-ink-900">${children}</strong>`,
+        },
+      },
+    })
+  : "";
 ---
 
 <Layout title="About — Alexis Porcaro">
-  <PageBanner title="About" eyebrow="The Artist" img={aboutBanner} />
+  <PageBanner
+    title={about?.bannerTitle ?? "About"}
+    eyebrow={about?.bannerEyebrow}
+    image={about?.bannerImage}
+  />
 
   <section class="py-20">
     <div
       class="mx-auto grid max-w-6xl gap-14 px-6 md:grid-cols-[1.4fr_1fr] lg:gap-20 lg:px-8"
     >
       <!-- Bio -->
-      <div class="reveal space-y-5 text-lg font-light leading-relaxed text-ink-700">
+      <div class="reveal">
         <h2 class="text-3xl text-ink-900">Biography</h2>
-        <p>
-          Oboist <strong class="font-medium text-ink-900">Alexis Porcaro</strong>
-          has been praised for the warmth of her sound and the intelligence of
-          her phrasing. Equally at home as soloist, chamber musician, and
-          orchestral principal, she brings a vocal, deeply communicative
-          sensibility to repertoire spanning the Baroque to the present day.
-        </p>
-        <p>
-          A dedicated advocate for new music, she has premiered works written
-          expressly for her and regularly collaborates with living composers.
-          Her recital programs are known for their thoughtful pairings of
-          familiar masterworks with rarely heard gems.
-        </p>
-        <p>
-          She has appeared with regional orchestras and festivals across the
-          country, and her playing has been featured on broadcast and in live
-          streamed performances. Recent seasons include concerto appearances,
-          chamber residencies, and a growing body of commissioned solo work.
-        </p>
-        <p>
-          Beyond the stage, Alexis is a sought-after teacher whose students have
-          gone on to leading conservatories and professional ensembles. She
-          maintains a private studio for advanced and pre-professional oboists.
-        </p>
-        <p class="text-sm italic text-ink-500">
-          Placeholder biography — final copy and images to come.
-        </p>
+        <div
+          class="mt-5 space-y-5 text-lg font-light leading-relaxed text-ink-700"
+          set:html={bioHtml}
+        />
       </div>
 
       <!-- Sidebar -->
       <aside class="reveal space-y-10">
-        <Image
-          src={aboutPortrait}
-          alt="Alexis Porcaro"
-          class="aspect-[4/5] w-full rounded-sm object-cover shadow-lg"
-          loading="lazy"
-        />
-        <dl class="divide-y divide-ink-100 border-y border-ink-100">
-          {
-            facts.map((f) => (
-              <div class="flex items-baseline justify-between py-3">
-                <dt class="text-xs uppercase tracking-[0.2em] text-ink-500">
-                  {f.label}
-                </dt>
-                <dd class="text-right text-sm text-ink-900">{f.value}</dd>
-              </div>
-            ))
-          }
-        </dl>
+        {
+          portraitSrc && (
+            <img
+              src={portraitSrc}
+              alt="Alexis Porcaro"
+              class="aspect-[4/5] w-full rounded-sm object-cover shadow-lg"
+              loading="lazy"
+            />
+          )
+        }
+        {
+          about?.facts?.length > 0 && (
+            <dl class="divide-y divide-ink-100 border-y border-ink-100">
+              {about.facts.map((f: { label: string; value: string }) => (
+                <div class="flex items-baseline justify-between py-3">
+                  <dt class="text-xs uppercase tracking-[0.2em] text-ink-500">
+                    {f.label}
+                  </dt>
+                  <dd class="text-right text-sm text-ink-900">{f.value}</dd>
+                </div>
+              ))}
+            </dl>
+          )
+        }
       </aside>
     </div>
   </section>
 
-  <!-- Repertoire -->
-  <section class="bg-ink-100/40 py-20">
-    <div class="mx-auto max-w-6xl px-6 lg:px-8">
-      <p class="text-xs uppercase tracking-[0.3em] text-brass-600">
-        Selected Repertoire
-      </p>
-      <h2 class="mt-3 text-4xl text-ink-900">Concertos & solo works</h2>
-      <ul
-        class="mt-10 grid gap-x-12 gap-y-4 text-lg font-light text-ink-700 sm:grid-cols-2"
-      >
-        {
-          repertoire.map((piece) => (
-            <li class="flex items-baseline gap-3 border-b border-ink-100 pb-4">
-              <span class="text-brass-500" aria-hidden="true">
-                ♪
-              </span>
-              {piece}
-            </li>
-          ))
-        }
-      </ul>
-    </div>
-  </section>
+  {
+    about?.repertoire?.length > 0 && (
+      <section class="bg-ink-100/40 py-20">
+        <div class="mx-auto max-w-6xl px-6 lg:px-8">
+          <p class="text-xs uppercase tracking-[0.3em] text-brass-600">
+            Selected Repertoire
+          </p>
+          <h2 class="mt-3 text-4xl text-ink-900">
+            {about.repertoireHeading ?? "Concertos & solo works"}
+          </h2>
+          <ul class="mt-10 grid gap-x-12 gap-y-4 text-lg font-light text-ink-700 sm:grid-cols-2">
+            {about.repertoire.map((piece: string) => (
+              <li class="flex items-baseline gap-3 border-b border-ink-100 pb-4">
+                <span class="text-brass-500" aria-hidden="true">
+                  ♪
+                </span>
+                {piece}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
 </Layout>
