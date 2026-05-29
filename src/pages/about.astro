@@ -67,6 +67,19 @@ const bioHtml = about?.bio
             </dl>
           )
         }
+        {
+          about?.resumeUrl && (
+            <a
+              href={about.resumeUrl}
+              target="_blank"
+              rel="noopener"
+              class="inline-flex items-center gap-2 rounded-full border border-ink-900 px-6 py-3 text-sm font-medium tracking-wide text-ink-900 transition-colors hover:bg-ink-900 hover:text-ink-50"
+            >
+              <span>Download Résumé</span>
+              <span aria-hidden="true">↓</span>
+            </a>
+          )
+        }
       </aside>
     </div>
   </section>

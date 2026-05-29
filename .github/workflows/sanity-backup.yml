@@ -1,0 +1,71 @@
+name: Sanity backup
+
+# Exports the Sanity `production` dataset (documents + assets, drafts included)
+# and attaches the tarball to a dated GitHub Release. Runs weekly and on demand.
+# Requires repo secret SANITY_READ_TOKEN (a Sanity Viewer token — needed so the
+# export includes drafts). Nothing here touches Vercel.
+
+on:
+  schedule:
+    - cron: "17 8 * * 1" # Mondays, 08:17 UTC
+  workflow_dispatch: # manual "Run workflow" button
+
+permissions:
+  contents: write # create releases + tags
+
+concurrency:
+  group: sanity-backup
+  cancel-in-progress: false
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Export Sanity dataset
+        env:
+          SANITY_AUTH_TOKEN: ${{ secrets.SANITY_READ_TOKEN }}
+        run: |
+          set -euo pipefail
+          STAMP="$(date -u +'%Y-%m-%d-%H%M')"
+          mkdir -p export && cd export
+          # Minimal CLI config so `sanity` knows the project, without loading the Studio.
+          cat > sanity.cli.ts <<'EOF'
+          export default { api: { projectId: 'djstmfxx', dataset: 'production' } }
+          EOF
+          OUT="alexisporcaro-production-${STAMP}.tar.gz"
+          npx --yes sanity@latest dataset export production "$OUT"
+          ls -lh "$OUT"
+          {
+            echo "OUT=export/${OUT}"
+            echo "TAG=backup-${STAMP}"
+          } >> "$GITHUB_ENV"
+
+      - name: Publish backup as a GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh release create "$TAG" "$OUT" \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "Sanity backup — ${TAG#backup-}" \
+            --notes "Automated export of the Sanity \`production\` dataset (documents + assets, drafts included)." \
+            --latest=false
+
+      - name: Prune old backups (keep newest 12)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh release list --repo "$GITHUB_REPOSITORY" --limit 200 --json tagName,createdAt \
+            --jq '[.[] | select(.tagName | startswith("backup-"))]
+                  | sort_by(.createdAt) | reverse | .[12:] | .[].tagName' \
+          | while read -r tag; do
+              [ -n "$tag" ] || continue
+              echo "Deleting old backup: $tag"
+              gh release delete "$tag" --repo "$GITHUB_REPOSITORY" --cleanup-tag --yes
+            done

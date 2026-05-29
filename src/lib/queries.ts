@@ -32,6 +32,7 @@ export async function getAbout() {
     bannerEyebrow, bannerTitle, bannerImage,
     bio,
     portrait,
+    "resumeUrl": resume.asset->url,
     facts,
     repertoireHeading,
     repertoire
