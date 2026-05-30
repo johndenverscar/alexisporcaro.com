@@ -38,6 +38,20 @@ All commands are run from the root of the project, from a terminal:
 | `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `npm run astro -- --help` | Get help using the Astro CLI                     |
 
+## 🗂️ Sanity Studio
+
+The CMS that backs this site lives in `sanity/` as its own package with its
+own `package.json`. Content is fetched from Sanity at build time.
+
+```sh
+cd sanity
+npm install
+npm run dev        # local studio at http://localhost:3333
+npm run deploy     # hosted studio at alexisporcaro.sanity.studio
+```
+
+Editor instructions for the site owner are in [`sanity/GUIDE.md`](sanity/GUIDE.md).
+
 ## 👀 Want to learn more?
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
