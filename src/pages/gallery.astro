@@ -1,0 +1,62 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PageBanner from "../components/PageBanner.astro";
+import { getGalleryPage, getPhotos } from "../lib/queries";
+import { urlFor } from "../lib/sanity";
+
+const page = await getGalleryPage();
+const photos = ((await getPhotos()) ?? []) as Array<{
+  _id: string;
+  image: unknown;
+  caption?: string;
+  alt?: string;
+}>;
+---
+
+<Layout
+  title="Gallery — Alexis Porcaro"
+  description="A photo gallery of oboist Alexis Porcaro."
+>
+  <PageBanner
+    title={page?.bannerTitle ?? "Gallery"}
+    eyebrow={page?.bannerEyebrow ?? "Photos"}
+    image={page?.bannerImage}
+  />
+
+  {
+    photos.length > 0 ? (
+      <section class="py-20">
+        <div class="mx-auto max-w-6xl px-6 lg:px-8">
+          <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+            {photos.map((p) => {
+              const src = urlFor(p.image).width(800).height(800).fit("crop").auto("format").url();
+              const alt = p.alt ?? p.caption ?? "";
+              return (
+                <figure class="reveal group overflow-hidden rounded-sm bg-ink-100">
+                  <div class="aspect-square w-full overflow-hidden">
+                    <img
+                      src={src}
+                      alt={alt}
+                      loading="lazy"
+                      decoding="async"
+                      class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  </div>
+                  {p.caption && (
+                    <figcaption class="px-3 py-2 text-xs text-ink-500">
+                      {p.caption}
+                    </figcaption>
+                  )}
+                </figure>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+    ) : (
+      <section class="py-32 text-center">
+        <p class="text-sm uppercase tracking-[0.3em] text-ink-400">Coming soon</p>
+      </section>
+    )
+  }
+</Layout>

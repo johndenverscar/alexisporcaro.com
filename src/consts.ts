@@ -3,6 +3,7 @@ export const NAV = [
   { label: "About", href: "/about" },
   { label: "Events", href: "/events" },
   { label: "Media", href: "/media" },
+  { label: "Gallery", href: "/gallery" },
   { label: "Lessons", href: "/lessons" },
   { label: "Contact", href: "/contact" },
 ];

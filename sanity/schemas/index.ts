@@ -5,9 +5,11 @@ import lessons from "./lessons";
 import contact from "./contact";
 import eventsPage from "./eventsPage";
 import mediaPage from "./mediaPage";
+import galleryPage from "./galleryPage";
 import event from "./event";
 import video from "./video";
 import audio from "./audio";
+import photo from "./photo";
 
 export const schemaTypes = [
   siteSettings,
@@ -17,9 +19,11 @@ export const schemaTypes = [
   contact,
   eventsPage,
   mediaPage,
+  galleryPage,
   event,
   video,
   audio,
+  photo,
 ];
 
 export const SINGLETON_TYPES = new Set([
@@ -30,4 +34,5 @@ export const SINGLETON_TYPES = new Set([
   "contact",
   "eventsPage",
   "mediaPage",
+  "galleryPage",
 ]);
