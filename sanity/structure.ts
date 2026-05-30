@@ -30,6 +30,12 @@ export const structure: StructureResolver = (S) =>
         .id("mediaPage")
         .child(S.document().schemaType("mediaPage").documentId("mediaPage")),
       S.listItem()
+        .title("Gallery Page (banner)")
+        .id("galleryPage")
+        .child(
+          S.document().schemaType("galleryPage").documentId("galleryPage"),
+        ),
+      S.listItem()
         .title("Lessons Page")
         .id("lessons")
         .child(S.document().schemaType("lessons").documentId("lessons")),
@@ -41,4 +47,5 @@ export const structure: StructureResolver = (S) =>
       S.documentTypeListItem("event").title("Events"),
       S.documentTypeListItem("video").title("Videos"),
       S.documentTypeListItem("audio").title("Audio Recordings"),
+      S.documentTypeListItem("photo").title("Photos"),
     ]);

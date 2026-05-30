@@ -87,3 +87,15 @@ export async function getAudio() {
     _id, title, detail, embedUrl
   }`);
 }
+
+export async function getGalleryPage() {
+  return sanity.fetch(`*[_type == "galleryPage"][0]{
+    bannerEyebrow, bannerTitle, bannerImage
+  }`);
+}
+
+export async function getPhotos() {
+  return sanity.fetch(`*[_type == "photo"] | order(_createdAt asc){
+    _id, image, caption, alt
+  }`);
+}
